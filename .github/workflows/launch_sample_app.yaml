@@ -31,21 +31,25 @@ jobs:
         with:
           sceptre_subcommand: 'validate base'
           sceptre_directory: './sceptre'
+          sceptre_version: '3.1.0'
 
       - name: 'Sceptre Launch Role'
         uses: Rurquhart/sceptre-action@master
         with:
           sceptre_subcommand: 'launch -y base'
           sceptre_directory: './sceptre'
+          sceptre_version: '3.1.0'
 
       - name: 'Sceptre Validate Sample app (dev)'
         uses: Rurquhart/sceptre-action@master
         with:
           sceptre_subcommand: 'validate sample-app'
           sceptre_directory: './sceptre'
+          sceptre_version: '3.1.0'
 
       - name: 'Sceptre Launch Sample App'
         uses: Rurquhart/sceptre-action@master
         with:
           sceptre_subcommand: 'launch -y sample-app/dev'
           sceptre_directory: './sceptre'
+          sceptre_version: '3.1.0'

@@ -1,0 +1,7 @@
+template_path: sceptre-role.yaml
+
+stack_name: SceptreRole
+
+parameters:
+  CICDRoleArn: {{ environment_variable.AWS_ROLE_ARN }}
+  DeploymentRoleName: SceptreRoleSampleApp

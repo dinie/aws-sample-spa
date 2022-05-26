@@ -1,0 +1,8 @@
+template_path: s3_cloudfront.yaml
+
+stack_name: SampleAppStaticWebsite
+
+parameters:
+  CertificateArn: ''  # Empty string triggers NoSSL Condition in CFN template
+  EnvType: 'dev'
+  FQDN: ''  # Empty string triggers NoFQDN Condition in CFN template

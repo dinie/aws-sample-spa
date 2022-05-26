@@ -1,0 +1,6 @@
+iam_role: !stack_output_external SceptreRole::SceptreRoleArn  # the IAM Role ARN that Sceptre should assume using AWS STS when executing any actions on the sample-app stack
+region: {{ environment_variable.AWS_REGION }}
+project_code: sample-app-s3-cloudfront
+
+dependencies:
+  - base/role.yaml

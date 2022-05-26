@@ -1,0 +1,62 @@
+name: 'Launch Sample Static Website Stack'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'sceptre/**'
+      - .github/workflows/launch_sample_app.yaml
+  workflow_dispatch:
+    inputs:
+      roleArn:
+        description: 'ARN of the OIDC hardened IAM Role for deployment'
+        required: true
+        type: string
+
+env:
+  AWS_REGION: 'ap-southeast-2'
+  AWS_ROLE_ARN: ${{ inputs.roleArn || secrets.AWS_ROLE_ARN }}
+
+jobs:
+  launch:
+    name: 'Sceptre launch static website stack'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ inputs.roleArn || secrets.AWS_ROLE_ARN }}
+          role-session-name: cicd-run-${{ github.sha }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Print logged in details
+        run: |
+          aws sts get-caller-identity
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+
+      - name: Sceptre validate base
+        run: sceptre validate base
+        working-directory: ./sceptre
+
+      - name: Sceptre run for base
+        run: sceptre launch base -y
+        working-directory: ./sceptre
+
+      - name: Sceptre validate sample app
+        run: sceptre validate sample-app
+        working-directory: ./sceptre
+
+      - name: Sceptre run for sample app
+        run: sceptre launch sample-app -y
+        working-directory: ./sceptre

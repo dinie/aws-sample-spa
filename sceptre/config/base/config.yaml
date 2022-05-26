@@ -1,0 +1,2 @@
+region: {{ environment_variable.AWS_REGION }}
+project_code: sample-app-s3-cloudfront

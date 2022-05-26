@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  The IAM Role used to execute the Sceptre run which build and deploys
+  the main stack in this repo, sample-app.
+
+Parameters:
+  CICDRoleArn:
+    Type: String
+    Description: The ARN of the IAM role used by CICD
+
+  DeploymentRoleName:
+    Type: String
+    Description: Name to use for this role
+
+Resources:
+  SceptreDeploymentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: '/'
+      RoleName: !Join ['-', [!Ref DeploymentRoleName, !Ref AWS::Region]]
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Ref CICDRoleArn
+            Action: 'sts:AssumeRole'
+
+  SceptreDeploymentRolePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: BaseSceptreDeploymentPolicy
+      Roles:
+      - Ref: SceptreDeploymentRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - cloudformation:CreateStack
+          - cloudformation:DeleteStack
+          - cloudformation:DescribeStackEvents
+          - cloudformation:DescribeStackResource
+          - cloudformation:DescribeStackResources
+          - cloudformation:DescribeStacks
+          - cloudformation:GetStackPolicy
+          - cloudformation:GetTemplate
+          - cloudformation:GetTemplateSummary
+          - cloudformation:ListStackResources
+          - cloudformation:ListStacks
+          - cloudformation:SetStackPolicy
+          - cloudformation:TagResource
+          - cloudformation:UntagResource
+          - cloudformation:UpdateStack
+          - cloudformation:UpdateTerminationProtection
+          - cloudformation:ValidateTemplate
+          - cloudformation:CreateChangeSet
+          - cloudformation:DeleteChangeSet
+          - cloudformation:DescribeChangeSet
+          - cloudformation:ExecuteChangeSet
+          - cloudformation:ListChangeSets
+          Resource:
+          - "*"
+        - Effect: Allow
+          Action:
+          - cloudfront:CreateCloudFrontOriginAccessIdentity
+          - cloudfront:DeleteCloudFrontOriginAccessIdentity
+          - cloudfront:CreateDistribution
+          - cloudfront:GetDistribution
+          - cloudfront:DeleteDistribution
+          - cloudfront:UpdateDistribution
+          - cloudfront:TagResource
+          - cloudfront:UntagResource
+          - logs:CreateLogGroup
+          - logs:CreateLogStream
+          - logs:DeleteLogGroup
+          - logs:PutLogEvents
+          - logs:PutRetentionPolicy
+          - s3:CreateBucket
+          - s3:DeleteBucket
+          - s3:PutBucketPolicy
+          - s3:PutObject
+          - s3:PutObjectAcl
+          Resource:
+          - "*"
+        - Effect: Allow
+          Action:
+          - s3:CreateBucket
+          - s3:DeleteBucket
+          - s3:PutBucketPolicy
+          - s3:PutObject
+          - s3:PutObjectAcl
+          - "s3:*"
+          Resource:
+          - "*"
+
+
+
+Outputs:
+  SceptreRoleArn:
+    Value:
+      Fn::GetAtt:
+      - SceptreDeploymentRole
+      - Arn
+    Description: Arn of the role to use for all sceptre deployments
+    Export:
+      Name: SceptreDeploymentRoleArn

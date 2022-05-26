@@ -27,25 +27,25 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: 'Sceptre Validate Base Role'
-        uses: Sceptre/github-ci-action@master
+        uses: Rurquhart/sceptre-action@master
         with:
           sceptre_subcommand: 'validate base'
           sceptre_directory: './sceptre'
 
       - name: 'Sceptre Launch Role'
-        uses: Sceptre/github-ci-action@master
+        uses: Rurquhart/sceptre-action@master
         with:
           sceptre_subcommand: 'launch -y base'
           sceptre_directory: './sceptre'
 
       - name: 'Sceptre Validate Sample app (dev)'
-        uses: Sceptre/github-ci-action@master
+        uses: Rurquhart/sceptre-action@master
         with:
           sceptre_subcommand: 'validate sample-app'
           sceptre_directory: './sceptre'
 
       - name: 'Sceptre Launch Sample App'
-        uses: Sceptre/github-ci-action@master
+        uses: Rurquhart/sceptre-action@master
         with:
           sceptre_subcommand: 'launch -y sample-app/dev'
           sceptre_directory: './sceptre'

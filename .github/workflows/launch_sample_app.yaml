@@ -1,0 +1,51 @@
+name: 'Launch Sample Static Website Stack'
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AWS_ROLE_ARN: 'arn:aws:iam::782209180207:role/GHActionsRoleCommoncodeAwsSceptre'
+  AWS_REGION: 'ap-southeast-2'
+
+jobs:
+  launch:
+    name: 'Sceptre launch static website stack'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: {{ env.AWS_ROLE_ARN }}
+          aws-region: {{ env.AWS_REGION }}
+
+      - name: 'Sceptre Validate Base Role'
+        uses: Sceptre/github-ci-action@master
+        with:
+          sceptre_subcommand: 'validate base'
+          sceptre_directory: './sceptre'
+
+      - name: 'Sceptre Launch Role'
+        uses: Sceptre/github-ci-action@master
+        with:
+          sceptre_subcommand: 'launch -y base'
+          sceptre_directory: './sceptre'
+
+      - name: 'Sceptre Validate Sample app (dev)'
+        uses: Sceptre/github-ci-action@master
+        with:
+          sceptre_subcommand: 'validate sample-app'
+          sceptre_directory: './sceptre'
+
+      - name: 'Sceptre Launch Sample App'
+        uses: Sceptre/github-ci-action@master
+        with:
+          sceptre_subcommand: 'launch -y sample-app/dev'
+          sceptre_directory: './sceptre'

@@ -25,7 +25,7 @@ jobs:
           path: drawio-assets
           format: adoc
           transparent: true
-          output: drawio-export
+          output: export
 
       - name: Get author and committer info from HEAD commit
         uses: rlespinasse/git-commit-data-action@v1.x

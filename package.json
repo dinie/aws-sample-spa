@@ -1,0 +1,17 @@
+{
+  "name": "aws-sceptre",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=17.6.0"
+  },
+  "private": true,
+  "scripts": {
+    "generate:vpcapp:diagram": "mkdir -p drawio-assets && cfn-dia draw.io -t sceptre/templates/application_vpc.yaml -c -o drawio-assets/application_vpc.drawio",
+    "generate:vpcapp:html": "cfn-dia html -t sceptre/templates/application_vpc.yaml",
+    "generate:vpcsecurity:diagram": "mkdir -p drawio-assets && cfn-dia draw.io -t sceptre/templates/security_vpc.yaml -c -o drawio-assets/security_vpc.drawio",
+    "generate:vpcsecurity:html": "cfn-dia html -t sceptre/templates/security_vpc.yaml"
+  },
+  "dependencies": {
+    "@mhlabs/cfn-diagram": "^1.1.33"
+  }
+}

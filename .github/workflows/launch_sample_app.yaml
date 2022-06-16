@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'sceptre/**'
+      - .github/workflows/launch_sample_app.yaml
   workflow_dispatch:
 
 env:
@@ -26,30 +29,28 @@ jobs:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: 'Sceptre Validate Base Role'
-        uses: Rurquhart/sceptre-action@master
-        with:
-          sceptre_subcommand: 'validate base'
-          sceptre_directory: './sceptre'
-          sceptre_version: '2.7.1'
+      - name: Print logged in details
+        run: |
+          aws sts get-caller-identity
 
-      - name: 'Sceptre Launch Role'
-        uses: Rurquhart/sceptre-action@master
+      - uses: actions/setup-python@v3
         with:
-          sceptre_subcommand: 'launch -y base'
-          sceptre_directory: './sceptre'
-          sceptre_version: '2.7.1'
+          python-version: '3.9'
+          cache: 'pip'
+      - run: pip install -r requirements.txt
 
-      - name: 'Sceptre Validate Sample app (dev)'
-        uses: Rurquhart/sceptre-action@master
-        with:
-          sceptre_subcommand: 'validate sample-app'
-          sceptre_directory: './sceptre'
-          sceptre_version: '2.7.1'
+      - name: Sceptre validate base
+        run: sceptre validate base
+        working-directory: ./sceptre
 
-      - name: 'Sceptre Launch Sample App'
-        uses: Rurquhart/sceptre-action@master
-        with:
-          sceptre_subcommand: 'launch -y sample-app/dev'
-          sceptre_directory: './sceptre'
-          sceptre_version: '2.7.1'
+      - name: Sceptre run for base
+        run: sceptre launch base -y
+        working-directory: ./sceptre
+
+      - name: Sceptre validate sample app
+        run: sceptre validate sample-app
+        working-directory: ./sceptre
+
+      - name: Sceptre run for sample app
+        run: sceptre launch sample-app/dev -y
+        working-directory: ./sceptre

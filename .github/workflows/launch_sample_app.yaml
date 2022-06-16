@@ -52,5 +52,5 @@ jobs:
         working-directory: ./sceptre
 
       - name: Sceptre run for sample app
-        run: sceptre launch sample-app/dev -y
+        run: sceptre launch sample-app -y
         working-directory: ./sceptre

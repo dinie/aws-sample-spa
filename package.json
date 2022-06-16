@@ -9,7 +9,9 @@
     "generate:vpcapp:diagram": "mkdir -p drawio-assets && cfn-dia draw.io -t sceptre/templates/application_vpc.yaml -c -o drawio-assets/application_vpc.drawio",
     "generate:vpcapp:html": "cfn-dia html -t sceptre/templates/application_vpc.yaml",
     "generate:vpcsecurity:diagram": "mkdir -p drawio-assets && cfn-dia draw.io -t sceptre/templates/security_vpc.yaml -c -o drawio-assets/security_vpc.drawio",
-    "generate:vpcsecurity:html": "cfn-dia html -t sceptre/templates/security_vpc.yaml"
+    "generate:vpcsecurity:html": "cfn-dia html -t sceptre/templates/security_vpc.yaml",
+    "generate:sampleapp:diagram": "mkdir -p drawio-assets && cfn-dia draw.io -t sceptre/templates/s3_cloudfront.yaml -c -o drawio-assets/s3_cloudfront.drawio",
+    "generate:sampleapp:html": "cfn-dia html -t sceptre/templates/s3_cloudfront.yaml"
   },
   "dependencies": {
     "@mhlabs/cfn-diagram": "^1.1.33"

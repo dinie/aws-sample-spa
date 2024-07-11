@@ -1,6 +1,2 @@
-iam_role: !stack_output_external SceptreRole::SceptreRoleArn
 region: {{ environment_variable.AWS_REGION }}
 project_code: sample-app-s3-cloudfront
-
-dependencies:
-  - base/role.yaml
